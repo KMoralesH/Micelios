@@ -1,40 +1,47 @@
-FROM php:8.2-apache
-
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+FROM php:8.2-fpm
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        libz-dev \
-        libpq-dev \
-        libjpeg-dev \
-        libpng-dev \
-        libssl-dev \
-        libzip-dev \
-        unzip \
-        zip \
+    libz-dev \
+    libpq-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libssl-dev \
+    libzip-dev \
+    unzip \
+    zip \
     && apt-get clean \
     && pecl install redis \
     && docker-php-ext-configure gd \
     && docker-php-ext-configure zip \
     && docker-php-ext-install \
-        gd \
-        exif \
-        opcache \
-        pdo_mysql \
-        pdo_pgsql \
-        pgsql \
-        pcntl \
-        zip \
+    gd \
+    exif \
+    opcache \
+    pdo_mysql \
+    pdo_pgsql \
+    pgsql \
+    pcntl \
+    zip \
     && docker-php-ext-enable redis \
     && rm -rf /var/lib/apt/lists/*;
 
-RUN mkdir -p /usr/src/app
+WORKDIR /var/www
 
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-WORKDIR /usr/src/app
-COPY ./v1/ /usr/src/app
+RUN groupadd -g 1000 www
+RUN useradd -u 1000 -ms /bin/bash -g www www
+# COPY composer.lock composer.json /var/www/
+
+COPY ./v1/ /var/www
 
 RUN composer install
 
-CMD php artisan serve --host=0.0.0.0 --port=8181
-EXPOSE 8181
+COPY --chown=www:www . /var/www
+USER www
+
+# CMD php artisan serve --host=0.0.0.0 --port=8181
+
+EXPOSE 9000
+CMD ["php-fpm"]

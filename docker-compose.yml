@@ -6,10 +6,10 @@ services:
       context: .
       dockerfile: ./v1/dockerfile
     ports:
-      - "8181:8181"
+      - "9000:9000"
     volumes:
-      - ./v1:/usr/src/app
-      - ./v1/public:/usr/src/app/public
+      - ./v1:/var/www
+      - ./v1/public:/var/www/public
     depends_on:
       - micelios_bd
     networks:
@@ -28,6 +28,23 @@ services:
       - MARIADB_PASSWORD=123456
       - MARIADB_ROOT_PASSWORD=123456
       - MARIADB_DATABASE=micelios_db
+    networks:
+      - micelios_network
+
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    #restart: always
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8082:80"
+      - "443:443"
+    volumes:
+      - ./v1/:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - micelios_backend
     networks:
       - micelios_network
 
