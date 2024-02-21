@@ -22,11 +22,11 @@ services:
     volumes:
       - ./v1/storage/db-data:/var/lib/mariadb
     ports: 
-      - "3606:3606"
+      - "3306:3306"
     environment:
       - MARIADB_USER=stickcode
       - MARIADB_PASSWORD=123456
-      - MARIADB_ROOT_PASSWORD=12345
+      - MARIADB_ROOT_PASSWORD=123456
       - MARIADB_DATABASE=micelios_db
     networks:
       - micelios_network
