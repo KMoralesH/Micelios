@@ -1,0 +1,54 @@
+version: "3.9"
+services:  
+  micelios_backend:
+    container_name: micelios_backend
+    build: 
+      context: .
+      dockerfile: ./v1/dockerfile
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./v1:/var/www
+      - ./v1/public:/var/www/public
+    depends_on:
+      - micelios_bd
+    networks:
+      - micelios_network
+  
+  micelios_bd:
+    container_name: micelios_bd
+    image: mariadb
+    restart: always
+    volumes:
+      - ./v1/storage/db-data:/var/lib/mariadb
+    ports: 
+      - "3306:3306"
+    environment:
+      - MARIADB_USER=stickcode
+      - MARIADB_PASSWORD=123456
+      - MARIADB_ROOT_PASSWORD=123456
+      - MARIADB_DATABASE=micelios_db
+    networks:
+      - micelios_network
+
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    #restart: always
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8082:80"
+      - "443:443"
+    volumes:
+      - ./v1/:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - micelios_backend
+    networks:
+      - micelios_network
+
+networks:
+  micelios_network:
+    driver: bridge
+  
