@@ -15,6 +15,9 @@ class ProductSeeder extends Seeder
     {
         Product::factory()->create([
             'product_name' => 'Honda 10w40',
+            'product_price_buy' => 4500,
+            'product_price_sail' => (4500 * 2.50),
+            'product_stock' => 10
         ]);
     }
 }
