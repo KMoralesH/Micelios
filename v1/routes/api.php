@@ -30,3 +30,12 @@ Route::get('categories', function () {
 
 //GO TO
 // Crear una ruta que muestre los productos por categoria usando Eloquent
+
+Route::get('producto-categoria/{id}', function(Request $request){
+
+    $categoria = $request->id;
+
+    $producto = new Product();
+    return $producto->where('category_id', '=', $categoria)->get();
+});
+
