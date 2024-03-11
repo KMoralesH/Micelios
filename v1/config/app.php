@@ -168,6 +168,14 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        /*Integración Swagger Version L5
+        Para  publicar se ejecuta el comando:
+        php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"
+        */
+
+        L5Swagger\L5SwaggerServiceProvider::class,
+
     ])->toArray(),
 
     /*

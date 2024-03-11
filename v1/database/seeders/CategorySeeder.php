@@ -13,8 +13,12 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
+        //
         Category::factory()->create([
-            'category_name' => 'Lubricantes'
+            'category_name' => 'Lubricantes',
+        ]);
+        Category::factory()->create([
+            'category_name' => 'Motores',
         ]);
     }
 }
