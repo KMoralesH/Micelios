@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use OpenApi\Annotations\Get;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,9 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('products', function () {
-    return Product::all();
-});
+Route::get('productos', [ProductController::class, 'index']);
 
 Route::get('categories', function () {
     return Category::all();
@@ -37,5 +37,14 @@ Route::get('producto-categoria/{id}', function(Request $request){
 
     $producto = new Product();
     return $producto->where('category_id', '=', $categoria)->get();
+});
+
+Route::get('categoria-productos', function(Request $request){
+    $categoria = new Category();
+    $productos = $categoria->product->get();
+
+    dd($productos);
+
+    return $productos;
 });
 
