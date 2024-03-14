@@ -5,22 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
-/**
- * @OA\Info(
- *             title="Micelios API",
- *             version="1.0",
- *             description="API de comunicación micelios backend"
- * )
-
- * @OA\Server(url="")
- */
-
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-
     /**
      * Listado de todos los productos disponibles
      * @OA\Get (
@@ -89,11 +75,39 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Mostrar la información de un producto pasando un ID
+     * @OA\Get (
+     *     path="/api/producto/{id}",
+     *     tags={"Productos"},
+     *     @OA\Parameter(
+     *         in="path",
+     *         name="id",
+     *         required=true,
+     *         @OA\Schema(type="number")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="id", type="number", example=1),
+     *              @OA\Property(property="categoria_id", type="number", example="1"),
+     *              @OA\Property(property="nombre_producto", type="string", example="Nombre Producto"),
+     *              @OA\Property(property="created_at", type="string", example="2023-02-23T00:09:16.000000Z"),
+     *              @OA\Property(property="updated_at", type="string", example="2023-02-23T12:33:45.000000Z")
+     *         )
+     *     ),
+     *      @OA\Response(
+     *          response=404,
+     *          description="NOT FOUND",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="message", type="string", example="No query results for model [App\\Models\\Cliente] #id"),
+     *          )
+     *      )
+     * )
      */
     public function show(Product $product)
     {
-        //
+        return $product::find(1);
     }
 
     /**
